@@ -1,0 +1,564 @@
+
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Календарь смен дяди Кости</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-image: url('https://raw.githubusercontent.com/krassa1883-pixel/Dorabotka/refs/heads/main/RpKnmxzsYDk.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            padding: 8px 3px;
+            margin: 0;
+        }
+
+        .calendar-container {
+            width: 100%;
+            max-width: 100%;
+            background: transparent;
+            border-radius: 0;
+            padding: 8px 3px 12px;
+            box-shadow: none;
+            border: none;
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: clamp(1rem, 4.5vw, 1.8rem);
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            background: linear-gradient(135deg, #ffffff, #ffd78c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 
+                0 0 10px rgba(255, 200, 50, 0.9),
+                0 0 20px rgba(255, 180, 0, 0.6),
+                0 0 30px rgba(255, 150, 0, 0.4),
+                0 2px 12px rgba(0, 0, 0, 0.9);
+            -webkit-text-stroke: 1.5px rgba(255, 220, 100, 0.8);
+            margin-bottom: 6px;
+            text-align: center;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.2;
+            padding: 0 5px;
+            animation: title-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes title-glow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(255, 200, 50, 0.9),
+                    0 0 20px rgba(255, 180, 0, 0.6),
+                    0 0 30px rgba(255, 150, 0, 0.4),
+                    0 2px 12px rgba(0, 0, 0, 0.9);
+            }
+            50% {
+                text-shadow: 
+                    0 0 15px rgba(255, 220, 80, 1),
+                    0 0 30px rgba(255, 200, 50, 0.9),
+                    0 0 45px rgba(255, 180, 0, 0.6),
+                    0 0 60px rgba(255, 150, 0, 0.4),
+                    0 2px 12px rgba(0, 0, 0, 0.9);
+            }
+        }
+
+        .subtitle {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: clamp(0.6rem, 2vw, 0.8rem);
+            letter-spacing: 0.8px;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 4px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+            white-space: nowrap;
+            animation: subtitle-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes subtitle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; }
+        }
+
+        .month-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 8px;
+            gap: 3px;
+        }
+
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            font-size: clamp(0.9rem, 3vw, 1.2rem);
+            width: clamp(32px, 8vw, 40px);
+            height: clamp(32px, 8vw, 40px);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+            text-shadow: 0 0 6px rgba(0,0,0,0.8);
+            animation: btn-bounce 2s ease-in-out infinite;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 180, 50, 0.4);
+        }
+
+        @keyframes btn-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .month-label {
+            font-size: clamp(0.9rem, 3.2vw, 1.3rem);
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0,0,0,0.6);
+            padding: 0 2px;
+            text-align: center;
+            white-space: nowrap;
+            animation: month-fade 2s ease-in-out infinite;
+        }
+
+        @keyframes month-fade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 3px;
+            width: 100%;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: 700;
+            font-size: clamp(0.45rem, 1.4vw, 0.65rem);
+            letter-spacing: 0.2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            padding: 4px 0;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .calendar-day {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 6px;
+            min-height: clamp(55px, 16vw, 95px);
+            padding: 3px 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(2px);
+            position: relative;
+            cursor: default;
+            overflow: hidden;
+            animation: day-appear 0.8s ease-out;
+        }
+
+        @keyframes day-appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-day:active {
+            transform: scale(0.96);
+            border-color: rgba(255, 200, 100, 0.7);
+        }
+
+        .day-number {
+            font-size: clamp(0.7rem, 1.9vw, 0.95rem);
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.5);
+            width: clamp(20px, 5vw, 30px);
+            height: clamp(20px, 5vw, 30px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .shift-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            width: 100%;
+        }
+
+        .shift-badge {
+            font-size: clamp(0.4rem, 1.3vw, 0.6rem);
+            font-weight: 700;
+            padding: 3px 4px;
+            border-radius: 20px;
+            letter-spacing: 0.1px;
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.55);
+            width: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .shift-day {
+            background: linear-gradient(145deg, #f9d976, #f3a83b);
+            color: #1f2a35;
+            border-color: #ffc107;
+            text-shadow: none;
+            animation: shift-glow-day 3s ease-in-out infinite;
+        }
+
+        @keyframes shift-glow-day {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 200, 50, 0.5); }
+            50% { box-shadow: 0 0 18px rgba(255, 200, 50, 0.9); }
+        }
+
+        .shift-night {
+            background: linear-gradient(145deg, #2c3e50, #1a2632);
+            color: #e0e6ed;
+            border-color: #7a9cb5;
+            box-shadow: 0 0 8px rgba(120, 180, 255, 0.6);
+            animation: shift-glow-night 3s ease-in-out infinite;
+        }
+
+        @keyframes shift-glow-night {
+            0%, 100% { box-shadow: 0 0 6px rgba(120, 180, 255, 0.6); }
+            50% { box-shadow: 0 0 16px rgba(120, 180, 255, 0.9); }
+        }
+
+        .shift-off {
+            background: linear-gradient(145deg, #3e5c4b, #1e3a2a);
+            color: #d9e9d0;
+            border-color: #6f9e7c;
+            animation: shift-glow-off 3s ease-in-out infinite;
+        }
+
+        @keyframes shift-glow-off {
+            0%, 100% { box-shadow: 0 0 6px rgba(110, 180, 130, 0.5); }
+            50% { box-shadow: 0 0 14px rgba(110, 180, 130, 0.8); }
+        }
+
+        .today-ring {
+            outline: 2px solid #ffb74d;
+            outline-offset: 1px;
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { outline-color: #ffb74d; box-shadow: 0 0 0 0 rgba(255, 183, 77, 0.5); }
+            70% { outline-color: #ffe0b2; box-shadow: 0 0 0 6px rgba(255, 183, 77, 0); }
+            100% { outline-color: #ffb74d; box-shadow: 0 0 0 0 rgba(255, 183, 77, 0); }
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            color: #ffffff;
+            font-size: clamp(0.5rem, 1.5vw, 0.7rem);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3px 8px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+            animation: legend-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes legend-pulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .legend-dot {
+            width: clamp(7px, 1.8vw, 11px);
+            height: clamp(7px, 1.8vw, 11px);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-day {
+            background: #f9d976;
+            box-shadow: 0 0 6px #ffc107;
+        }
+        .dot-night {
+            background: #2c3e50;
+            border: 1px solid #7a9cb5;
+            box-shadow: 0 0 6px #5c8db5;
+        }
+        .dot-off {
+            background: #3e5c4b;
+            border: 1px solid #6f9e7c;
+            box-shadow: 0 0 6px #4caf7a;
+        }
+
+        .empty-day {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            pointer-events: none;
+            min-height: clamp(55px, 16vw, 95px);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 8px;
+            color: #ffffff;
+            font-style: italic;
+            font-size: clamp(0.55rem, 1.8vw, 0.75rem);
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            white-space: nowrap;
+            animation: footer-blink 3s ease-in-out infinite;
+        }
+
+        @keyframes footer-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+<div class="calendar-container">
+    <div class="calendar-header">
+        <div class="title">📅 Календарь смен дяди Кости</div>
+        <div class="subtitle">⚡ 2 в день · 2 в ночь · 2 вых-ых ⚡</div>
+    </div>
+
+    <div class="month-navigation">
+        <button class="nav-btn" id="prevMonthBtn" aria-label="Предыдущий месяц">◀</button>
+        <span class="month-label" id="monthLabel">Сентябрь 2026</span>
+        <button class="nav-btn" id="nextMonthBtn" aria-label="Следующий месяц">▶</button>
+    </div>
+
+    <div class="weekdays">
+        <div class="weekday">Пн</div>
+        <div class="weekday">Вт</div>
+        <div class="weekday">Ср</div>
+        <div class="weekday">Чт</div>
+        <div class="weekday">Пт</div>
+        <div class="weekday">Сб</div>
+        <div class="weekday">Вс</div>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <div class="legend">
+        <div class="legend-item"><span class="legend-dot dot-day"></span> Дневная</div>
+        <div class="legend-item"><span class="legend-dot dot-night"></span> Ночная</div>
+        <div class="legend-item"><span class="legend-dot dot-off"></span> Вых-ой</div>
+    </div>
+
+    <div class="footer-note">
+        ✨ Сегодня — вторая ночь, перед выходными ✨
+    </div>
+</div>
+
+<script>
+    (function() {
+        const CYCLE_DAY = 0;
+        const CYCLE_NIGHT = 1;
+        const CYCLE_OFF = 2;
+
+        // Точка отсчёта: 2 сентября 2026 — вторая ночь
+        const BASE_DATE = new Date(2026, 7, 31); // 31 августа 2026 — второй день
+        const BASE_CYCLE_POS = 1; // позиция в цикле 6: 0(день1), 1(день2), 2(ночь1), 3(ночь2), 4(вых1), 5(вых2)
+
+        let currentYear = 2026;
+        let currentMonth = 8; // сентябрь (0-индекс)
+
+        function getShiftForDate(date) {
+            const baseDay = new Date(BASE_DATE.getFullYear(), BASE_DATE.getMonth(), BASE_DATE.getDate());
+            const targetDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const diffTime = targetDay - baseDay;
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            const cyclePos = ((diffDays + BASE_CYCLE_POS) % 6 + 6) % 6;
+            
+            if (cyclePos === 0 || cyclePos === 1) return CYCLE_DAY;
+            else if (cyclePos === 2 || cyclePos === 3) return CYCLE_NIGHT;
+            else return CYCLE_OFF;
+        }
+
+        function getShiftLabel(shift) {
+            if (shift === CYCLE_DAY) return 'День';
+            if (shift === CYCLE_NIGHT) return 'Ночь';
+            return 'Вых-ой';
+        }
+
+        function getShiftClass(shift) {
+            if (shift === CYCLE_DAY) return 'shift-day';
+            if (shift === CYCLE_NIGHT) return 'shift-night';
+            return 'shift-off';
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getFullYear() === today.getFullYear() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getDate() === today.getDate();
+        }
+
+        function formatMonthLabel(year, month) {
+            const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            return `${monthNames[month]} ${year}`;
+        }
+
+        function renderCalendar(year, month) {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            document.getElementById('monthLabel').textContent = formatMonthLabel(year, month);
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let firstWeekday = firstDayOfMonth.getDay();
+            firstWeekday = (firstWeekday === 0) ? 6 : firstWeekday - 1; // Пн=0
+
+            for (let i = 0; i < firstWeekday; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty-day';
+                grid.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const shift = getShiftForDate(dateObj);
+                const shiftLabel = getShiftLabel(shift);
+                const shiftClass = getShiftClass(shift);
+
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                if (isToday(dateObj)) {
+                    dayCell.classList.add('today-ring');
+                }
+
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+
+                const shiftBadge = document.createElement('div');
+                shiftBadge.className = `shift-badge ${shiftClass}`;
+                shiftBadge.textContent = shiftLabel;
+
+                const shiftInfo = document.createElement('div');
+                shiftInfo.className = 'shift-info';
+                shiftInfo.appendChild(shiftBadge);
+
+                dayCell.appendChild(dayNumber);
+                dayCell.appendChild(shiftInfo);
+                grid.appendChild(dayCell);
+            }
+        }
+
+        document.getElementById('prevMonthBtn').addEventListener('click', function() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        document.getElementById('nextMonthBtn').addEventListener('click', function() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        renderCalendar(currentYear, currentMonth);
+    })();
+</script>
+</body>
+</html>
+```
